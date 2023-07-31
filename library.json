@@ -1,0 +1,17 @@
+{
+  "name": "accept",
+  "version": "0.1.0",
+  "description": "Simple line editing",
+  "keywords": "c++, input",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/40hz/cpp/accept.git"
+  },
+  "authors": {
+    "name": "Eckhart Koeppen",
+    "email": "eck@40hz.org",
+    "url": "https://40hz.org/"
+  },
+  "license": "MIT",
+  "homepage": "https://gitlab.com/40hz/cpp/accept"
+}
