@@ -9,8 +9,10 @@ format-check:
   stage: check
   script:
     - echo "Checking code formatting..."
+    - find test include examples -name '*.h' -o -name '*.hpp' -o -name '*.c' -o -name '*.cpp' | xargs clang-format-16 -n -Werror
+
 
 unit-test:
   stage: test
   script:
-    - echo "Unit testing..."
+    - pio test -e native

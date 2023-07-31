@@ -9,11 +9,12 @@
 
 using namespace accept;
 
-template<size_t N>
-auto equals(std::span<uint8_t> a, const uint8_t (&b)[N]) -> bool {
-  if (a.size() != N) return false;
+template <size_t N> auto equals(std::span<uint8_t> a, const uint8_t (&b)[N]) -> bool {
+  if (a.size() != N)
+    return false;
   for (size_t i = 0; i < N; i++) {
-    if (a[i] != b[i]) return false;
+    if (a[i] != b[i])
+      return false;
   }
   return true;
 }
@@ -159,8 +160,8 @@ TEST_CASE("Accept") {
 
 int main(int argc, char **argv) {
   doctest::Context context;
-  context.setOption("success", true);     // Report successful tests
-  context.setOption("no-exitcode", true); // Do not return non-zero code on failed test case
+  context.setOption("success", true);
+  context.setOption("no-exitcode", true);
   context.applyCommandLine(argc, argv);
   return context.run();
 }
