@@ -1,0 +1,16 @@
+default:
+  image: registry.gitlab.com/40hz/docker-images/remix:6.1.9
+
+stages:
+  - check
+  - test
+
+format-check:
+  stage: check
+  script:
+    - echo "Checking code formatting..."
+
+unit-test:
+  stage: test
+  script:
+    - echo "Unit testing..."
