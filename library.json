@@ -13,5 +13,9 @@
     "url": "https://40hz.org/"
   },
   "license": "MIT",
-  "homepage": "https://gitlab.com/40hz/cpp/accept"
+  "homepage": "https://gitlab.com/40hz/cpp/accept",
+  "dependencies": {
+    "name": "fsm",
+    "version": "https://gitlab.com/40hz/cpp/fsm.git @ ^0.2.0"
+  }
 }

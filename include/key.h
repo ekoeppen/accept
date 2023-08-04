@@ -16,7 +16,7 @@ enum Result {
 };
 
 struct Csi {
-  std::array<uint8_t, 3> params{0, 0, 0};
+  std::array<uint16_t, 3> params{0, 0, 0};
   uint8_t numParams{0};
   uint8_t finalValue{0};
 };
@@ -56,8 +56,8 @@ struct Reader {
         fsm.state = states::Input;
         return Csi;
       } else if (csi.numParams < csi.params.size()) {
-        csi.params[csi.numParams] =
-            csi.params[csi.numParams] * static_cast<uint8_t>(10) + key - static_cast<uint8_t>('0');
+        csi.params[csi.numParams] *= 10;
+        csi.params[csi.numParams] += static_cast<uint16_t>(key - 48);
       }
       return Incomplete;
     case states::Param_Done:
