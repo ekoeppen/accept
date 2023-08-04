@@ -57,7 +57,7 @@ struct Reader {
         return Csi;
       } else if (csi.numParams < csi.params.size()) {
         csi.params[csi.numParams] =
-            csi.params[csi.numParams] * static_cast<uint8_t>(10) + key - '0';
+            csi.params[csi.numParams] * static_cast<uint8_t>(10) + key - static_cast<uint8_t>('0');
       }
       return Incomplete;
     case states::Param_Done:
