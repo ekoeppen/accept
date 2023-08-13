@@ -60,6 +60,8 @@ public:
 
   auto accepted() -> std::span<uint8_t> { return std::span<uint8_t>(line.begin(), last); }
 
+  auto reset() -> void { last = 0; }
+
 protected:
   size_t last;
   std::array<uint8_t, N> line;
