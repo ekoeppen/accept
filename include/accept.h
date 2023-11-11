@@ -18,7 +18,9 @@ enum State {
   Canceled,
 };
 
-template <size_t N, auto write> class Accept {
+typedef void (*function_t)(uint8_t);
+
+template <size_t N, function_t write> class Accept {
 public:
   Accept() : last(0) {}
 
