@@ -9,7 +9,7 @@
 
 using namespace accept;
 
-template <size_t N> auto equals(std::span<uint8_t> a, const uint8_t (&b)[N]) -> bool {
+template <size_t N> auto equals(std::span<const uint8_t> a, const uint8_t (&b)[N]) -> bool {
   if (a.size() != N)
     return false;
   for (size_t i = 0; i < N; i++) {
@@ -124,10 +124,11 @@ TEST_CASE("Key handling") {
 }
 
 TEST_CASE("Accept") {
-  auto accept = accept::Accept<4, [](uint8_t c) {}>();
+  auto accept = accept::Accept<4>();
   SUBCASE("Simple keys") {
     auto result = accept.handle('A');
-    CHECK(result == accept::Editing);
+    CHECK(result.state == accept::Editing);
+    CHECK(equals(result.output, {'A'}));
     CHECK(equals(accept.accepted(), {'A'}));
     result = accept.handle('B');
     CHECK(equals(accept.accepted(), {'A', 'B'}));

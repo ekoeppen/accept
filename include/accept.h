@@ -18,36 +18,35 @@ enum State {
   Canceled,
 };
 
-typedef void (*function_t)(uint8_t);
+struct Result {
+  State state;
+  std::span<const uint8_t> output{};
+};
 
-template <size_t N, function_t write> class Accept {
+template <size_t N> class Accept {
 public:
-  Accept() : last(0) {}
-
-  auto handle(uint8_t key) -> State {
+  auto handle(uint8_t key) -> Result {
     switch (reader.handle(key)) {
     case key::Plain:
       if (last < N) {
-        write(reader.value);
         line[last] = reader.value;
         ++last;
+        return {.state = Editing, .output = std::span(&line[last - 1], &line[last])};
       }
       break;
     case key::C0:
       switch (reader.value) {
       case 3:
-        return Canceled;
+        return {.state = Canceled};
       case 9:
-        return Tab;
+        return {.state = Tab};
       case 10:
-        return Accepted;
+        return {.state = Accepted};
       case 8:
       case 127:
         if (last > 0) {
           --last;
-          write(8);
-          write(' ');
-          write(8);
+          return {.state = Editing, .output = std::span(backspace)};
         }
         break;
       default:
@@ -57,7 +56,7 @@ public:
     default:
       break;
     }
-    return Editing;
+    return {.state = Editing};
   }
 
   auto accepted() -> std::span<uint8_t> { return std::span<uint8_t>(line.begin(), last); }
@@ -65,7 +64,8 @@ public:
   auto reset() -> void { last = 0; }
 
 protected:
-  size_t last;
+  static constexpr uint8_t backspace[] = {8, 32, 8};
+  size_t last{0};
   std::array<uint8_t, N> line;
   key::Reader reader;
 };
