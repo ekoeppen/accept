@@ -1,6 +1,6 @@
 {
   "name": "accept",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Simple line editing",
   "keywords": "c++, input",
   "repository": {

@@ -125,7 +125,7 @@ TEST_CASE("Key handling") {
 
 TEST_CASE("Accept") {
   struct Writer {
-    auto write(uint8_t c) const -> void { (void)c; };
+    auto send(uint8_t c) const -> void { (void)c; };
   };
   Writer writer;
 

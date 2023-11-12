@@ -18,14 +18,14 @@ enum State {
   Canceled,
 };
 
-template <size_t N, typename Writer> struct Accept {
+template <size_t N, typename Output> struct Accept {
   auto handle(uint8_t key) -> State {
     switch (reader.handle(key)) {
     case key::Plain:
       if (last < N) {
         line[last] = reader.value;
         ++last;
-        writer.write(reader.value);
+        output.send(reader.value);
       }
       break;
     case key::C0:
@@ -40,9 +40,9 @@ template <size_t N, typename Writer> struct Accept {
       case 127:
         if (last > 0) {
           --last;
-          writer.write(8);
-          writer.write(32);
-          writer.write(8);
+          output.send(8);
+          output.send(32);
+          output.send(8);
         }
         break;
       default:
@@ -59,7 +59,7 @@ template <size_t N, typename Writer> struct Accept {
 
   auto reset() -> void { last = 0; }
 
-  const Writer &writer;
+  const Output &output;
   size_t last{0};
   std::array<uint8_t, N> line{};
   key::Reader reader{};
