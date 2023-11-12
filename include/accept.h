@@ -18,35 +18,31 @@ enum State {
   Canceled,
 };
 
-struct Result {
-  State state;
-  std::span<const uint8_t> output{};
-};
-
-template <size_t N> class Accept {
-public:
-  auto handle(uint8_t key) -> Result {
+template <size_t N, typename Writer> struct Accept {
+  auto handle(uint8_t key) -> State {
     switch (reader.handle(key)) {
     case key::Plain:
       if (last < N) {
         line[last] = reader.value;
         ++last;
-        return {.state = Editing, .output = std::span(&line[last - 1], &line[last])};
+        writer.write(reader.value);
       }
       break;
     case key::C0:
       switch (reader.value) {
       case 3:
-        return {.state = Canceled};
+        return Canceled;
       case 9:
-        return {.state = Tab};
+        return Tab;
       case 10:
-        return {.state = Accepted};
+        return Accepted;
       case 8:
       case 127:
         if (last > 0) {
           --last;
-          return {.state = Editing, .output = std::span(backspace)};
+          writer.write(8);
+          writer.write(32);
+          writer.write(8);
         }
         break;
       default:
@@ -56,18 +52,17 @@ public:
     default:
       break;
     }
-    return {.state = Editing};
+    return Editing;
   }
 
   auto accepted() -> std::span<uint8_t> { return std::span<uint8_t>(line.begin(), last); }
 
   auto reset() -> void { last = 0; }
 
-protected:
-  static constexpr uint8_t backspace[] = {8, 32, 8};
+  const Writer &writer;
   size_t last{0};
-  std::array<uint8_t, N> line;
-  key::Reader reader;
+  std::array<uint8_t, N> line{};
+  key::Reader reader{};
 };
 
 }; // namespace accept
