@@ -129,7 +129,7 @@ TEST_CASE("Accept") {
   };
   Writer writer;
 
-  auto accept = accept::Accept<4, Writer>{writer};
+  auto accept = accept::Accept<Writer, 4>{.output = writer};
   SUBCASE("Simple keys") {
     auto result = accept.handle('A');
     CHECK(result == accept::Editing);

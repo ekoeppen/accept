@@ -18,7 +18,12 @@ enum State {
   Canceled,
 };
 
-template <size_t N, typename Output> struct Accept {
+template <typename Output, size_t N = 80> struct Accept {
+  const Output &output;
+  size_t last{0};
+  std::array<uint8_t, N> line{};
+  key::Reader reader{};
+
   auto handle(uint8_t key) -> State {
     switch (reader.handle(key)) {
     case key::Plain:
@@ -56,13 +61,7 @@ template <size_t N, typename Output> struct Accept {
   }
 
   auto accepted() -> std::span<uint8_t> { return std::span<uint8_t>(line.begin(), last); }
-
   auto reset() -> void { last = 0; }
-
-  const Output &output;
-  size_t last{0};
-  std::array<uint8_t, N> line{};
-  key::Reader reader{};
 };
 
 }; // namespace accept
