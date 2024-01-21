@@ -15,7 +15,12 @@ auto write(uint8_t c) -> void {
   board::usart.send(c);
 }
 
-auto a = accept::Accept<10, write>();
+struct Writer {
+  auto send(uint8_t c) const -> void { write(c); }
+};
+
+Writer writer;
+auto a = accept::Accept<Writer, 80>{.output = writer};
 
 auto main() -> int {
   board::init();

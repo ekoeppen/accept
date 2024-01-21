@@ -55,12 +55,18 @@ auto in() -> uint8_t {
   return c;
 }
 
+struct Writer {
+  auto send(uint8_t c) const -> void { out(c); }
+};
+
+Writer writer;
+
 auto main() -> int {
   configure_input();
   setup_signal_handlers();
 
   std::cout << "Accept:" << std::endl;
-  auto accept = accept::Accept<10, out>();
+  auto accept = accept::Accept<Writer, 10>{.output = writer};
   bool done = false;
   while (!done) {
     switch (accept.handle(in())) {
