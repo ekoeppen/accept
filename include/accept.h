@@ -20,7 +20,7 @@ enum State {
 
 template<typename Output, size_t N = 80>
 struct Accept {
-    const Output& output;
+    Output& output;
     size_t last { 0 };
     std::array<uint8_t, N> line {};
     key::Reader reader {};
