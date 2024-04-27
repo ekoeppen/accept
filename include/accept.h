@@ -22,10 +22,10 @@ template<typename Output, size_t N = 80>
 struct Accept {
     Output& output;
     size_t last { 0 };
-    std::array<uint8_t, N> line {};
+    std::array<char, N> line {};
     key::Reader reader {};
 
-    auto handle(uint8_t key) -> State
+    auto handle(char key) -> State
     {
         switch (reader.handle(key)) {
         case key::Plain:
@@ -62,7 +62,7 @@ struct Accept {
         return Editing;
     }
 
-    auto accepted() -> std::span<uint8_t> { return std::span<uint8_t>(line.begin(), last); }
+    auto accepted() -> std::span<char> { return std::span<char>(line.begin(), last); }
     auto reset() -> void { last = 0; }
 };
 

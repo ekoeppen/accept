@@ -17,19 +17,19 @@ enum Result {
 
 struct Csi {
     std::array<uint16_t, 3> params { 0, 0, 0 };
-    uint8_t numParams { 0 };
-    uint8_t finalValue { 0 };
+    char numParams { 0 };
+    char finalValue { 0 };
 };
 
 struct Reader {
     struct Csi csi {};
-    uint8_t value;
+    char value;
 
-    fsm::Fsm<uint8_t, states::State, states::Action, states::transitions> fsm {
+    fsm::Fsm<char, states::State, states::Action, states::transitions> fsm {
         .state = states::Input,
     };
 
-    auto handle(uint8_t key) -> Result
+    auto handle(char key) -> Result
     {
         auto action = fsm.input(key);
         if (!action.hasValue) {

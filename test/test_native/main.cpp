@@ -10,7 +10,7 @@
 using namespace accept;
 
 template<size_t N>
-auto equals(std::span<uint8_t> a, const uint8_t (&b)[N]) -> bool
+auto equals(std::span<char> a, const char (&b)[N]) -> bool
 {
     if (a.size() != N)
         return false;
@@ -23,13 +23,13 @@ auto equals(std::span<uint8_t> a, const uint8_t (&b)[N]) -> bool
 
 TEST_CASE("FSM States")
 {
-    fsm::Fsm<uint8_t, states::State, states::Action, states::transitions> fsm {
+    fsm::Fsm<char, states::State, states::Action, states::transitions> fsm {
         .state = states::Input,
     };
     SUBCASE("Simple inputs")
     {
-        for (uint8_t k : std::ranges::views::iota(32, 255)
-                | std::views::filter([](uint8_t k) { return k != 27; })) {
+        for (char k : std::ranges::views::iota(32, 255)
+                | std::views::filter([](char k) { return k != 27; })) {
             auto action = fsm.input(k);
             CHECK(action.hasValue);
             CHECK(action.value == states::Plain);
@@ -39,8 +39,8 @@ TEST_CASE("FSM States")
 
     SUBCASE("C1 control codes")
     {
-        for (uint8_t k : std::views::iota(0, 255)
-                | std::views::filter([](uint8_t k) { return k != 'O' && k != '['; })) {
+        for (char k : std::views::iota(0, 255)
+                | std::views::filter([](char k) { return k != 'O' && k != '['; })) {
             auto action = fsm.input(27);
             CHECK(!action.hasValue);
             CHECK(fsm.state == states::Esc);
@@ -54,7 +54,7 @@ TEST_CASE("FSM States")
 
     SUBCASE("SS3 control codes")
     {
-        for (uint8_t k : std::views::iota(0, 255)) {
+        for (char k : std::views::iota(0, 255)) {
             auto action = fsm.input(27);
             CHECK(!action.hasValue);
             CHECK(fsm.state == states::Esc);
@@ -134,7 +134,7 @@ TEST_CASE("Key handling")
 TEST_CASE("Accept")
 {
     struct Writer {
-        auto send(uint8_t c) const -> void { (void)c; };
+        auto send(char c) const -> void { (void)c; };
     };
     Writer writer;
 

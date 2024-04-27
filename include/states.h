@@ -23,7 +23,7 @@ enum Action {
     Vt_App,
 };
 
-constexpr std::array<fsm::Transition<uint8_t, State, Action>, 8> transitions { {
+constexpr std::array<fsm::Transition<char, State, Action>, 8> transitions { {
     { .state = Input, .event = 27, .newState = Esc },
     { .state = Input, .action = Plain },
     { .state = Esc, .event = '[', .action = Start_Param, .newState = Esc_Csi_Param },
