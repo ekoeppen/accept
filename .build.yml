@@ -4,8 +4,6 @@ secrets:
 environment:
   REPO: accept
 packages:
-  - build-base
-  - cmake
   - clang19-extra-tools
   - python3
 sources:
@@ -14,6 +12,12 @@ tasks:
   - lint: |
       cd $REPO
       find test include examples -name '*.h' -o -name '*.hpp'  -o -name '*.c' -o -name '*.cpp' | xargs clang-format -n -Werror
+  - platformio: |
+      python3 -m venv $HOME/.local
+      $HOME/.local/bin/pip3 install platformio
+  - test: |
+      cd $REPO
+      $HOME/.local/bin/pio test -e native
   - mirror-to-github: |
       if [ "$GIT_REF" == "refs/heads/main" ] && [ -e "$HOME/.token" ]
       then
