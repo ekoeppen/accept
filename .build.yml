@@ -1,17 +1,17 @@
-image: alpine/edge
+image: debian/stable
 secrets:
   - fa19c627-c19e-46f1-9257-30f9a6f15516
 environment:
   REPO: accept
 packages:
-  - clang19-extra-tools
-  - python3
+  - clang-format-16
+  - python3-venv
 sources:
   - https://git.sr.ht/~ekoeppen/accept
 tasks:
   - lint: |
       cd $REPO
-      find test include examples -name '*.h' -o -name '*.hpp'  -o -name '*.c' -o -name '*.cpp' | xargs clang-format -n -Werror
+      find test include examples -name '*.h' -o -name '*.hpp'  -o -name '*.c' -o -name '*.cpp' | xargs clang-format-16 -n -Werror
   - platformio: |
       python3 -m venv $HOME/.local
       $HOME/.local/bin/pip3 install platformio
@@ -25,4 +25,3 @@ tasks:
         set +x
         git push --mirror "https://ekoeppen:$(cat $HOME/.token)@github.com/ekoeppen/$REPO"
       fi
-
