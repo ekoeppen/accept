@@ -1,0 +1,24 @@
+image: alpine/edge
+secrets:
+  - fa19c627-c19e-46f1-9257-30f9a6f15516
+environment:
+  REPO: accept
+packages:
+  - build-base
+  - cmake
+  - clang19-extra-tools
+  - python3
+sources:
+  - https://git.sr.ht/~ekoeppen/accept
+tasks:
+  - lint: |
+      cd $REPO
+      find test include examples -name '*.h' -o -name '*.hpp'  -o -name '*.c' -o -name '*.cpp' | xargs clang-format -n -Werror
+  - mirror-to-github: |
+      if [ "$GIT_REF" == "refs/heads/main" ] && [ -e "$HOME/.token" ]
+      then
+        cd $REPO
+        set +x
+        git push --mirror "https://ekoeppen:$(cat $HOME/.token)@github.com/ekoeppen/$REPO"
+      fi
+
