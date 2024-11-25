@@ -1,11 +1,11 @@
 {
   "name": "accept",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Simple line editing",
   "keywords": "c++, input",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/40hz/cpp/accept.git"
+    "url": "https://git.sr.ht/~ekoeppen/accept"
   },
   "authors": {
     "name": "Eckhart Koeppen",
@@ -13,7 +13,7 @@
     "url": "https://40hz.org/"
   },
   "license": "MIT",
-  "homepage": "https://gitlab.com/40hz/cpp/accept",
+  "homepage": "https://git.sr.ht/~ekoeppen/accept",
   "dependencies": {
     "name": "simple-fsm",
     "version": "~0.2.1"
